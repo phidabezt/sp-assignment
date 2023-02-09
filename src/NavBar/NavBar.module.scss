@@ -1,0 +1,23 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  
+  &__icon {
+    cursor: pointer;
+  }
+
+  &__content {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  &__dropdown {
+    margin-top: 0.7rem;
+    &::after {
+      content: "▼";
+      cursor: pointer;
+      width: 2rem;
+    }
+  }
+}
