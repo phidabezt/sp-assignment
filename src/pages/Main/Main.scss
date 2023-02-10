@@ -1,0 +1,11 @@
+.main {
+  color: #fff;
+  font-family: 'Source Sans Pro', sans-serif;
+  &__upper {
+    background-image: linear-gradient(#0068cc,#70b9ff);
+    padding: 1rem 15rem 0rem 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
