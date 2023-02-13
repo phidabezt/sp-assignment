@@ -2,27 +2,29 @@ import React from "react";
 import AddButtonIcon from "../../assets/icons/add-button.svg";
 import classes from './Detail.module.scss'
 
-export const Detail = () => {
+export const Detail = ({ current }) => {
   return (
     <section className={classes['detail']}>
       <div className={classes['detail__item']}>
         <div className={classes['detail__wrapper']}>
           <h3>PSI</h3>
-          <p className={`${classes['detail__value']} ${classes['detail__value--surround']}`}>23</p>
+          <p className={`${classes['detail__value']} ${classes['detail__value--surround']}`}>{current?.psi}</p>
           <h4>Good</h4>
         </div>
       </div>
       <div className={classes['detail__item']}>
         <div className={classes['detail__wrapper']}>
           <h3>RAIN</h3>
-          <p className={classes['detail__value']}>0</p>
+          <p className={classes['detail__value']}>{current?.rain || 0}</p>
           <h4>mm</h4>
         </div>
       </div>
       <div className={classes['detail__item']}>
         <div className={classes['detail__wrapper']}>
           <h3>DENGUE</h3>
-          <div className={classes['detail__percent']} />
+          <div className={classes['detail__percent']}>
+            <p className={classes['detail__percent-value']}><span>{current?.dengue}</span>%</p>
+          </div>
         </div>
       </div>
       <button className={`${classes['detail__button']} ${classes['detail__item']}`}>

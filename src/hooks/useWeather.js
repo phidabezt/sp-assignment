@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { weatherApi } from '../api/weatherApi'
+import { convertHectopascalToMeter } from '../utils/utils'
+import { convertHectopascalToPsi } from '../utils/utils'
 
 const VN_LAT_LNG = {
   lat: 10.823099,
@@ -8,7 +10,8 @@ const VN_LAT_LNG = {
 
 export const useWeather = () => { 
   const [weatherCurrent, setWeatherCurrent] = useState(null)
-  const [weatherHourly, setWeatherHourly] = useState(null)
+  const [seaLevels, setSeaLevels] = useState([])
+  const [sunLevels, setSunLevels] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -24,8 +27,25 @@ export const useWeather = () => {
         lon: VN_LAT_LNG.lon,
         units: 'metric'
       })
-      setWeatherCurrent(response.current)
-      setWeatherHourly(response.hourly)
+
+      const icon = weatherApi.getWeatherIcon(response.current.weather[0].icon)
+
+      setWeatherCurrent({
+        temp: response.current.temp,
+        weather: response.current.weather[0].main,
+        icon: response.current.weather[0].icon,
+        humidity: response.current.humidity,
+        rain: response.current?.rain || 0,
+        dengue: response.current.dengue || 51,
+        psi: convertHectopascalToPsi(response.current.pressure),
+        icon
+      })
+      setSeaLevels(response.hourly.map(item => Number(convertHectopascalToMeter(item.pressure)),
+      ))
+      setSunLevels(response.daily.map(item => ({
+        sunrise: item.sunrise,
+        sunset: item.sunset
+      })))
       setLoading(false)
     } catch (error) {
       setError(error)
@@ -33,5 +53,5 @@ export const useWeather = () => {
     }
   }
 
-  return { weatherCurrent, weatherHourly, error, loading }
+  return { weatherCurrent, seaLevels, sunLevels, error, loading }
 }

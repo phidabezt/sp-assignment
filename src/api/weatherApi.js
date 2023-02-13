@@ -12,5 +12,9 @@ export const weatherApi = {
     } catch (error) {
       console.log(error)
     }
+  },
+  getWeatherIcon: (iconId) => { 
+    const url = `https://openweathermap.org/img/wn/${iconId}@2x.png`;
+    return url
   }
 }
