@@ -1,0 +1,39 @@
+.chart {
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  max-width: 1000px;
+  overflow-x: scroll;
+  position: relative;
+
+  path {
+    width: 00px;
+  }
+
+  &__title {
+    position: absolute;
+    top: 0;
+  }
+
+  &__tide {
+    color: #80dcff;
+  }
+
+  &__dot {
+    color: #afc7d0;
+  }
+
+  &__sun {
+    color: #f98a00;
+  }
+
+  &__value {
+    &--tide {
+      fill: #0068cc;
+      font-size: 1.1rem;
+    }
+    &--time {
+      fill: #70b9ff;
+      font-size: 0.9rem;
+    }
+  }
+}

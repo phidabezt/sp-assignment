@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { weatherApi } from '../api/weatherApi'
-import { convertHectopascalToMeter } from '../utils/utils'
-import { convertHectopascalToPsi } from '../utils/utils'
+import { convertHectopascalToMeter, convertHectopascalToPsi, convertUnixToTime } from '../utils/utils'
 
 const VN_LAT_LNG = {
   lat: 10.823099,
@@ -40,8 +39,11 @@ export const useWeather = () => {
         psi: convertHectopascalToPsi(response.current.pressure),
         icon
       })
-      setSeaLevels(response.hourly.map(item => Number(convertHectopascalToMeter(item.pressure)),
-      ))
+
+      setSeaLevels(response.hourly.map(item => ({
+        time: new Date(convertUnixToTime(item.dt)),
+        sea_level: Number(convertHectopascalToMeter(item.pressure))
+      })))
       setSunLevels(response.daily.map(item => ({
         sunrise: item.sunrise,
         sunset: item.sunset

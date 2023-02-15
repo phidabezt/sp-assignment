@@ -1,39 +1,43 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import classes from './Graph.module.scss'
+import classes from './Chart.module.scss'
+import { de } from "date-fns/locale";
+import { extent } from "d3";
+import { Marks } from "./Marks";
 
-const drawChart = (svgRef, seaLevels) => {
-  const data = seaLevels;
-  const h = 300;
-  const w = 700;
-  const svg = d3.select(svgRef.current);
+const margin = { top: 100, right: 50, bottom: 100, left: 25 }
+const width = 8000
+const height = 400
+const innerWidth = width - margin.left - margin.right
+const innerHeight = height - margin.top - margin.bottom
 
-  svg
-    .attr("width", w)
-    .attr("height", h)
+export const Chart = ({ data }) => {
+  const xValue = d => d.time
+  const yValue = d => d.sea_level
 
-  svg
-    .selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", (d, i) => i * 40)
-    .attr("y", (d, i) => h - 10 * d)
-    .attr("width", 20)
-    .attr("height", (d, i) => d * 10)
-    .attr("fill", "steelblue");
-}
+  const xScale = d3
+    .scaleTime()
+    .domain(extent(data, xValue))
+    .range([0, innerWidth])
 
-export const Graph = ({ seaLevels }) => {
-  const svg = useRef(null);
-
-  useEffect(() => {
-    drawChart(svg, seaLevels);
-  }, [seaLevels]);
+  const yScaleLeft = d3
+    .scaleLinear()
+    .domain(extent(data, yValue))
+    .range([innerHeight, 0])
+    .nice()
 
   return (
-    <div className={classes['graph']}>
-      <svg ref={svg} />
+    <div className={classes['chart']}>
+      <h3 className={classes['chart__title']}>
+        <span className={classes['chart__tide']}>Tide</span>
+        <span className={classes['chart__dot']}> • </span>
+        <span className={classes['chart__sun']}>Sunrise & Sunset</span>
+      </h3>
+      <svg width={width} height={height}>
+        <g transform={`translate(${margin.left},${margin.top})`}>
+          <Marks xScale={xScale} xValue={xValue} yScaleLeft={yScaleLeft} yValue={yValue} data={data} marginBottom={margin.bottom} />
+        </g>
+      </svg>
     </div>
-  );
-};
+  )
+}
