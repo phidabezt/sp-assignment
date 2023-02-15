@@ -9,8 +9,6 @@ import './Main.scss'
 export const Main = () => {
   const { weatherCurrent, seaLevels, sunLevels } = useWeather()
 
-  // expand the data from 48-length array to 2880-length array 
-
   return (
     <div className="main">
       <div className="main__upper">
@@ -19,7 +17,7 @@ export const Main = () => {
         <Detail data={weatherCurrent} />
       </div>
       <div className="main__lower">
-        <Chart data={seaLevels} />
+        <Chart dataTide={seaLevels} dataSun={sunLevels} />
       </div>
     </div>
   )

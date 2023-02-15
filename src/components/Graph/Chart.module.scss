@@ -1,17 +1,17 @@
 .chart {
-  margin: 0 auto;
   margin-bottom: 2rem;
-  max-width: 1000px;
   overflow-x: scroll;
-  position: relative;
-
-  path {
-    width: 00px;
-  }
 
   &__title {
     position: absolute;
-    top: 0;
+    top: 5%;
+    left: 5%;
+  }
+
+  h2 {
+    position: absolute;
+    top: 5%;
+    left: 5%;
   }
 
   &__tide {
@@ -24,16 +24,5 @@
 
   &__sun {
     color: #f98a00;
-  }
-
-  &__value {
-    &--tide {
-      fill: #0068cc;
-      font-size: 1.1rem;
-    }
-    &--time {
-      fill: #70b9ff;
-      font-size: 0.9rem;
-    }
   }
 }

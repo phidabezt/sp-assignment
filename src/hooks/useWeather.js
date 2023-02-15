@@ -44,10 +44,24 @@ export const useWeather = () => {
         time: new Date(convertUnixToTime(item.dt)),
         sea_level: Number(convertHectopascalToMeter(item.pressure))
       })))
-      setSunLevels(response.daily.map(item => ({
-        sunrise: item.sunrise,
-        sunset: item.sunset
-      })))
+      // setSunLevels(response.daily.map(item => ({
+      //   sunrise: item.sunrise,
+      //   sunset: item.sunset
+      // })))
+      setSunLevels([
+        {
+          sunrise: new Date(convertUnixToTime(response.daily[0].sunrise)),
+          sunset: new Date(convertUnixToTime(response.daily[0].sunset))
+        },
+        {
+          sunrise: new Date(convertUnixToTime(response.daily[1].sunrise)),
+          sunset: new Date(convertUnixToTime(response.daily[1].sunset))
+        },
+        {
+          sunrise: new Date(convertUnixToTime(response.daily[2].sunrise)),
+          sunset: new Date(convertUnixToTime(response.daily[2].sunset))
+        }
+      ])
       setLoading(false)
     } catch (error) {
       setError(error)
