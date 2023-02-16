@@ -25,4 +25,42 @@
   &__sun {
     color: #f98a00;
   }
+
+
+  // TODO: Move it to a separate component file
+  &__date {
+    z-index: 2;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &__icon {
+    z-index: 2;
+    position: absolute;
+    top: 130px; // 500 130
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  &__measure {
+    border-left: 2px solid;
+    border-image: linear-gradient(to top, #7e7c7c, #fff) 1 100%;
+    height: 440px;
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+  }
+
+  &__description {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+    background-color: #D4D4D4;
+    color: #7e7c7c;
+  }
+
 }
