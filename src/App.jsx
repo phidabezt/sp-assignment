@@ -1,20 +1,10 @@
-import './App.css'
-import { NavBar } from './NavBar'
-import { Info } from './Info'
-
-function App() {
-
+import { Main } from './pages/Main'
+const App = () => {
   return (
     <div className="App">
-      {/*----NAVBAR----*/}
-      <NavBar />
-      {/*----INFO----*/}
-      <Info />
-      {/*----DETAIL----*/}
-      {/*----GRAPH----*/}
-
+      <Main />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

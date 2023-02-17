@@ -1,0 +1,28 @@
+.chart {
+  margin-bottom: 2rem;
+  overflow-x: scroll;
+
+  &__title {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+  }
+
+  h2 {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+  }
+
+  &__tide {
+    color: #80dcff;
+  }
+
+  &__dot {
+    color: #afc7d0;
+  }
+
+  &__sun {
+    color: #f98a00;
+  }
+}

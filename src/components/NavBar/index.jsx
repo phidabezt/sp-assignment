@@ -1,6 +1,6 @@
 import React from 'react'
-import MenuIcon from '../assets/icons/menu.svg'
-import NotificationIcon from '../assets/icons/notification.svg'
+import MenuIcon from '../../assets/icons/menu.svg'
+import NotificationIcon from '../../assets/icons/notification.svg'
 import classes from './NavBar.module.scss'
 
 export const NavBar = () => { 
