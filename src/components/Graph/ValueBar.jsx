@@ -17,7 +17,7 @@ export const ValueBar = ({ yBar, barWidth, barHeight, cleanedSunPositions, forma
             <text
               key={i}
               x={d[0]}
-              y={530}
+              y={300}
               dx={0}
               textAnchor='middle'
               fill='#f97400'

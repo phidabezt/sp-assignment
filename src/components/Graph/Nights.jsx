@@ -1,7 +1,7 @@
 import React from 'react'
 import * as d3 from "d3";
 
-export const Nights = ({ xScale, xValueSunRise, xValueSunSet, dataSun, height, innerHeight }) => {
+export const Nights = ({ xScale, xValueSunRise, xValueSunSet, dataSun, height, innerHeight, yShift }) => {
   return (
     <g>
       {
@@ -11,7 +11,7 @@ export const Nights = ({ xScale, xValueSunRise, xValueSunSet, dataSun, height, i
               <rect
                 key={i}
                 x={xScale(xValueSunSet(dataSun[i - 1]))}
-                y={-innerHeight}
+                y={yShift}
                 width={
                   xScale(xValueSunRise(d)) - xScale(xValueSunSet(dataSun[i - 1]))
                 }
