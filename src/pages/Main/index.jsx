@@ -2,7 +2,7 @@ import React from 'react'
 import { NavBar } from '../../components/NavBar'
 import { Info } from '../../components/Info'
 import { Detail } from '../../components/Detail'
-import { Chart } from '../../components/Graph'
+import { Chart } from '../../components/Chart'
 import { useWeather } from '../../hooks/useWeather'
 import './Main.scss'
 

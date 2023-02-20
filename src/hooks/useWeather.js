@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
 import { weatherApi } from '../api/weatherApi'
 import { convertHectopascalToMeter, convertHectopascalToPsi, convertUnixToTime } from '../utils/utils'
-
-const VN_LAT_LNG = {
-  lat: 10.823099,
-  lon: 106.629664
-}
+import { VN_LAT_LNG } from '../constant/common'
 
 export const useWeather = () => { 
   const [weatherCurrent, setWeatherCurrent] = useState(null)
@@ -30,7 +26,7 @@ export const useWeather = () => {
       const icon = weatherApi.getWeatherIcon(response.current.weather[0].icon)
 
       setWeatherCurrent({
-        temp: response.current.temp,
+        temp: Number(response.current.temp).toFixed(0),
         weather: response.current.weather[0].main,
         icon: response.current.weather[0].icon,
         humidity: response.current.humidity,

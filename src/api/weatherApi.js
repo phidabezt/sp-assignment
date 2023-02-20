@@ -7,7 +7,7 @@ export const weatherApi = {
       return await axiosClient.get(url, {
         params: {
           ...searchParams,
-          appid: import.meta.env.VITE_API_KEY,
+          appid: process.env.VITE_API_KEY,
       } });
     } catch (error) {
       console.log(error)
