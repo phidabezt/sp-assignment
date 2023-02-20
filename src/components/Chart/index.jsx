@@ -9,16 +9,16 @@ import { Measurement } from "./Measurement"
 import SunIcon from '../../assets/icons/sun.svg'
 import MoonIcon from '../../assets/icons/moon.svg'
 
-const margin = { top: 100, right: 0, bottom: 100, left: 0 }
-const width = 8000
-const height = 280
-const innerWidth = width - margin.left - margin.right
-const innerHeight = height - margin.top - margin.bottom
-const extraHeight = 40
-const sunRiseConfig = 30
-const sunSetConfig = 90
-const defaultDateString = '2023-01-01' // this is a dummy date to be used for the time scale
-const moonIconYAxis = 130
+const MARGIN = { top: 100, right: 0, bottom: 100, left: 0 }
+const WIDTH = 8000
+const HEIGHT = 280
+const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right
+const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom
+const EXTRA_HEIGHT = 40
+const SUN_RISE_CONFIG = 30
+const SUN_SET_CONFIG = 90
+const DEFAULT_DATE_STRING = '2023-01-01' // this is a dummy date to be used for the time scale
+const MOON_ICON_Y_AXIS = 130
 
 export const Chart = ({ dataTide, dataSun }) => {
   const xValueTime = d => d ? d.time : new Date()
@@ -30,36 +30,36 @@ export const Chart = ({ dataTide, dataSun }) => {
   const [iconStatus, setIconStatus] = useState('')
   const [sunIconDomain, setSunIconDomain] = useState([0, 0])
   const [sunIconRange, setSunIconRange] = useState([0, 0])
-  
+
   const formattedDataSun = dataSun.reduce((acc, d) => {
     acc.push(d.sunrise)
     acc.push(d.sunset)
     return acc
   }, [])
-  
+
   const yScaleIcon = d3
     .scaleTime()
     .domain(sunIconDomain)
     .range(sunIconRange)
-  
+
   const xScale = d3
     .scaleTime()
     .domain(d3.extent(dataTide, xValueTime))
-    .range([0, innerWidth])
+    .range([0, INNER_WIDTH])
 
   const yScaleTide = d3
     .scaleLinear()
     .domain(d3.extent(dataTide, yValueTide))
-    .range([innerHeight, 0])
+    .range([INNER_HEIGHT, 0])
     .nice()
 
 
   const chartIcon = useMemo(() => {
     const currentDate = xScale.invert(scrollValue)
-    if(isNaN(currentDate.getTime())) return undefined // if the date is not valid, return null
-    if ((currentDate > dataSun[0]?.sunrise && currentDate < dataSun[0]?.sunset) ||
-      (currentDate > dataSun[1]?.sunrise && currentDate < dataSun[1]?.sunset) ||
-      (currentDate > dataSun[2]?.sunrise && currentDate < dataSun[2]?.sunset)) {
+    if (isNaN(currentDate.getTime())) return undefined // if the date is not valid, return null
+    if ((currentDate > dataSun[0].sunrise && currentDate < dataSun[0].sunset) ||
+      (currentDate > dataSun[1].sunrise && currentDate < dataSun[1].sunset) ||
+      (currentDate > dataSun[2].sunrise && currentDate < dataSun[2].sunset)) {
       setIconStatus('sun')
       return SunIcon
     }
@@ -68,44 +68,73 @@ export const Chart = ({ dataTide, dataSun }) => {
   }, [scrollValue])
 
   const sunPositions = dataSun.reduce((acc, d) => {
-    acc.push([xScale(xValueSunRise(d)), height - sunSetConfig])
-    acc.push([(xScale(xValueSunRise(d)) + xScale(xValueSunSet(d))) / 2, sunRiseConfig])
-    acc.push([xScale(xValueSunSet(d)), height - sunSetConfig])
+    acc.push([xScale(xValueSunRise(d)), HEIGHT - SUN_SET_CONFIG])
+    acc.push([(xScale(xValueSunRise(d)) + xScale(xValueSunSet(d))) / 2, SUN_RISE_CONFIG])
+    acc.push([xScale(xValueSunSet(d)), HEIGHT - SUN_SET_CONFIG])
     return acc
   }, [])
 
-  const cleanedSunPositions = sunPositions.reduce((acc, d, i) => {
+  const cleanedSunPositions = sunPositions.reduce((acc, pos, i) => {
     if (i === 1 || i === 4 || i === 7) return acc // remove the middle point (high point of the sun)
-    acc.push(d)
+    acc.push(pos)
     return acc
+  }, []).map((pos, i) => ({
+    x_scale_value: pos[0],
+    y_scale_value: 300,
+    key: pos[0],
+    time: d3.timeFormat('%I:%M %p')(formattedDataSun[i])
+  }))
+
+  const reduceTides = dataTide.reduce((acc, d, i) => {
+    if (i % 2 === 0) acc.push(d)
+    acc.pop()
+    return acc.map(d => ({
+      ...d,
+      key: xValueTime(d),
+      time: d3.timeFormat('%I:%M %p')(new Date(d.time)),
+      x_scale_value: xScale(xValueTime(d)),
+      y_scale_value: yScaleTide(yValueTide(d))
+    }))
   }, [])
+
+  const nights = dataSun.map((d, i) => {
+    if (i <= 0 || i > dataSun.length - 1) return undefined
+    return {
+      ...d,
+      key: xScale(xValueSunSet(dataSun[i - 1])),
+      x_scale_value: xScale(xValueSunSet(dataSun[i - 1])),
+      y_scale_value: INNER_HEIGHT + MARGIN.bottom - HEIGHT,
+      width: xScale(xValueSunRise(d)) - xScale(xValueSunSet(dataSun[i - 1])),
+      height: HEIGHT + INNER_HEIGHT
+    }
+  })
 
   const handleScrolling = (e) => {
     const currentScroll = e.target.scrollLeft
     const maxScroll = e.target.scrollWidth - e.target.clientWidth
     const domainCutValue = maxScroll / 2 - e.target.scrollWidth / 2
     const scrollValueToChartValue = d3.scaleTime()
-    .domain([domainCutValue, maxScroll - domainCutValue])
-    .range([0, innerWidth])
-    
+      .domain([domainCutValue, maxScroll - domainCutValue])
+      .range([0, INNER_WIDTH])
+
     // set scroll value to convert it to date
     const scrollValue = scrollValueToChartValue(currentScroll)
     setScrollValue(scrollValue)
-    setIconYAXis(yScaleIcon(new Date(d3.timeFormat(`${defaultDateString} %H:%M`)(xScale.invert(scrollValue)))))
+    setIconYAXis(yScaleIcon(new Date(d3.timeFormat(`${DEFAULT_DATE_STRING} %H:%M`)(xScale.invert(scrollValue)))))
 
     // set sun icon domain
     const sunIconDomain = dataSun.reduce((acc, d) => {
       // middle point between sunrise and sunset
       const middlePoint = new Date((d.sunrise.getTime() + d.sunset.getTime()) / 2)
       if (xScale.invert(scrollValue) > xValueSunRise(d) && xScale.invert(scrollValue) < middlePoint) {
-        acc.push(new Date(d3.timeFormat(`${defaultDateString} %H:%M`)(xValueSunRise(d))))
-        acc.push(new Date(d3.timeFormat(`${defaultDateString} %H:%M`)(middlePoint)))
-        setSunIconRange([height, sunRiseConfig + margin.bottom])
+        acc.push(new Date(d3.timeFormat(`${DEFAULT_DATE_STRING} %H:%M`)(xValueSunRise(d))))
+        acc.push(new Date(d3.timeFormat(`${DEFAULT_DATE_STRING} %H:%M`)(middlePoint)))
+        setSunIconRange([HEIGHT, SUN_RISE_CONFIG + MARGIN.bottom])
       }
       if (xScale.invert(scrollValue) > middlePoint && xScale.invert(scrollValue) < xValueSunSet(d)) {
-        acc.push(new Date(d3.timeFormat(`${defaultDateString} %H:%M`)(middlePoint)))
-        acc.push(new Date(d3.timeFormat(`${defaultDateString} %H:%M`)(xValueSunSet(d))))
-        setSunIconRange([sunRiseConfig + margin.bottom, height])
+        acc.push(new Date(d3.timeFormat(`${DEFAULT_DATE_STRING} %H:%M`)(middlePoint)))
+        acc.push(new Date(d3.timeFormat(`${DEFAULT_DATE_STRING} %H:%M`)(xValueSunSet(d))))
+        setSunIconRange([SUN_RISE_CONFIG + MARGIN.bottom, HEIGHT])
       }
       return acc
     }, [])
@@ -133,43 +162,31 @@ export const Chart = ({ dataTide, dataSun }) => {
           <span className={classes['chart__dot']}> • </span>
           <span className={classes['chart__sun']}>Sunrise & Sunset</span>
         </h3>
-        <svg width={width} height={height + extraHeight}>
+        <svg width={WIDTH} height={HEIGHT + EXTRA_HEIGHT}>
           <svg>
-            <g transform={`translate(${margin.left},${margin.top})`}>
+            <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
               <Tides
-                xScale={xScale}
-                xValueTime={xValueTime}
-                yScaleTide={yScaleTide}
-                yValueTide={yValueTide}
+                xScale={d => xScale(xValueTime(d))}
+                yScaleTide={d => yScaleTide(yValueTide(d))}
                 dataTide={dataTide}
+                reduceTides={reduceTides}
               />
-              <Nights
-                xScale={xScale}
-                xValueSunRise={xValueSunRise}
-                xValueSunSet={xValueSunSet}
-                dataSun={dataSun}
-                height={height}
-                innerHeight={innerHeight}
-                yShift={innerHeight + margin.bottom - height}
-              />
+              <Nights nights={nights} />
               <SunPath sunPositions={sunPositions} />
-              <g>
-              </g>
             </g>
           </svg>
           <ValueBar
-            yBar={height}
-            barWidth={width}
-            barHeight={extraHeight}
+            yBar={HEIGHT}
+            barWidth={WIDTH}
+            barHeight={EXTRA_HEIGHT}
             cleanedSunPositions={cleanedSunPositions}
-            formattedDataSun={formattedDataSun}
           />
         </svg>
       </div>
       <Measurement
         chartIcon={chartIcon}
         iconStatus={iconStatus}
-        moonIconYAxis={moonIconYAxis}
+        moonIconYAxis={MOON_ICON_Y_AXIS}
         iconYAXis={iconYAXis}
         measurementDate={getDayMonthWithSuffix(xScale.invert(scrollValue))}
         measurementTime={d3.timeFormat('%I:%M %p')(xScale.invert(scrollValue))}

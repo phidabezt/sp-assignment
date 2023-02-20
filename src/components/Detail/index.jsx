@@ -8,14 +8,14 @@ export const Detail = ({ data }) => {
       <div className={classes['detail__item']}>
         <div className={classes['detail__wrapper']}>
           <h3>PSI</h3>
-          <p className={`${classes['detail__value']} ${classes['detail__value--surround']}`}>{data?.psi}</p>
+          <p className={`${classes['detail__value']} ${classes['detail__value--surround']}`}>{data.psi}</p>
           <h4>Good</h4>
         </div>
       </div>
       <div className={classes['detail__item']}>
         <div className={classes['detail__wrapper']}>
           <h3>RAIN</h3>
-          <p className={classes['detail__value']}>{data?.rain || 0}</p>
+          <p className={classes['detail__value']}>{data.rain}</p>
           <h4>mm</h4>
         </div>
       </div>
@@ -23,7 +23,7 @@ export const Detail = ({ data }) => {
         <div className={classes['detail__wrapper']}>
           <h3>DENGUE</h3>
           <div className={classes['detail__percent']}>
-            <p className={classes['detail__percent-value']}><span>{data?.dengue}</span>%</p>
+            <p className={classes['detail__percent-value']}><span>{data.dengue}</span>%</p>
           </div>
         </div>
       </div>
