@@ -152,7 +152,7 @@ export const Chart = ({ dataTide, dataSun }) => {
                 innerHeight={innerHeight}
                 yShift={innerHeight + margin.bottom - height}
               />
-              <SunPath sunPositions={sunPositions} dataSun={dataSun} />
+              <SunPath sunPositions={sunPositions} />
               <g>
               </g>
             </g>
