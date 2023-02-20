@@ -2,36 +2,30 @@ import React from 'react'
 import * as d3 from "d3";
 import classes from './Tides.module.scss'
 
-export const Tides = ({ xScale, xValueTime, yScaleTide, yValueTide, dataTide }) => {
-  const reduceTide = () => {
-    const res = dataTide.filter((_, i) => i % 2 !== 0)
-    res.pop()
-    return res
-  }
-  
+export const Tides = ({ xScale, yScaleTide, dataTide, reduceTides }) => {  
   return (
     <g className={classes['tides']}>
       {
-        reduceTide().map((d, i) => {
+        reduceTides.map((tide, i) => {
           return (
-            <g key={xValueTime(d)}>
+            <g key={tide.key}>
               <text
                 className={classes['tides__value']}
-                x={xScale(xValueTime(d))}
-                y={yScaleTide(yValueTide(d))}
+                x={tide.x_scale_value}
+                y={tide.y_scale_value}
                 dy='-1.5rem'
                 textAnchor='middle'
               >
-                {d.sea_level}m
+                {tide.sea_level}m
               </text>
               <text
                 className={classes['tides__time']}
-                x={xScale(xValueTime(d))}
-                y={yScaleTide(yValueTide(d))}
+                x={tide.x_scale_value}
+                y={tide.y_scale_value}
                 dy='-0.5rem'
                 textAnchor='middle'
               >
-                {d3.timeFormat('%I:%M %p')(new Date(d.time))}
+                {tide.time}
               </text>
             </g>
           )
@@ -40,9 +34,9 @@ export const Tides = ({ xScale, xValueTime, yScaleTide, yValueTide, dataTide }) 
       <path d={d3
         .area()
         .curve(d3.curveNatural)
-        .x(d => xScale(xValueTime(d)))
+        .x(xScale)
         .y0(innerHeight)
-        .y1(d => yScaleTide(yValueTide(d)))(dataTide)}
+        .y1(yScaleTide)(dataTide)}
         fill='#70b9ff'
       />
     </g>

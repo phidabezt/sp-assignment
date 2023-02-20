@@ -1,7 +1,7 @@
 import React from 'react'
 import * as d3 from 'd3'
 
-export const ValueBar = ({ yBar, barWidth, barHeight, cleanedSunPositions, formattedDataSun }) => {
+export const ValueBar = ({ yBar, barWidth, barHeight, cleanedSunPositions }) => {
   return (
     <g>
       <rect
@@ -12,19 +12,19 @@ export const ValueBar = ({ yBar, barWidth, barHeight, cleanedSunPositions, forma
         fill='#D4D4D4'
       />
       {
-        cleanedSunPositions.map((d, i) => {
+        cleanedSunPositions.map((pos, i) => {
           return (
             <text
               key={i}
-              x={d[0]}
-              y={300}
+              x={pos.x_scale_value}
+              y={pos.y_scale_value}
               dx={0}
               textAnchor='middle'
               fill='#f97400'
               fontSize='18'
               fontWeight='bold'
             >
-              {d3.timeFormat('%I:%M %p')(formattedDataSun[i])}
+              {pos.time}
             </text>
           )
         })

@@ -4,7 +4,15 @@ import { convertHectopascalToMeter, convertHectopascalToPsi, convertUnixToTime }
 import { VN_LAT_LNG } from '../constant/common'
 
 export const useWeather = () => { 
-  const [weatherCurrent, setWeatherCurrent] = useState(null)
+  const [currentWeather, setCurrentWeather] = useState({
+    temp: 0,
+    weather: '',
+    icon: '',
+    humidity: 0,
+    rain: 0,
+    dengue: 0,
+    psi: 0
+  })
   const [seaLevels, setSeaLevels] = useState([])
   const [sunLevels, setSunLevels] = useState([])
   const [error, setError] = useState(null)
@@ -25,12 +33,12 @@ export const useWeather = () => {
 
       const icon = weatherApi.getWeatherIcon(response.current.weather[0].icon)
 
-      setWeatherCurrent({
+      setCurrentWeather({
         temp: Number(response.current.temp).toFixed(0),
         weather: response.current.weather[0].main,
         icon: response.current.weather[0].icon,
         humidity: response.current.humidity,
-        rain: response.current?.rain || 0,
+        rain: response.current.rain || 0,
         dengue: response.current.dengue || 51,
         psi: convertHectopascalToPsi(response.current.pressure),
         icon
@@ -40,10 +48,10 @@ export const useWeather = () => {
         time: new Date(convertUnixToTime(item.dt)),
         sea_level: Number(convertHectopascalToMeter(item.pressure))
       })))
-      // setSunLevels(response.daily.map(item => ({
-      //   sunrise: item.sunrise,
-      //   sunset: item.sunset
-      // })))
+      /*
+        Since the API only returns 48 hours in the hourly array, we only need to get the next 3 days
+        from the daily array instead of taking all 8 days from the daily array
+      */
       setSunLevels([
         {
           sunrise: new Date(convertUnixToTime(response.daily[0].sunrise)),
@@ -65,5 +73,5 @@ export const useWeather = () => {
     }
   }
 
-  return { weatherCurrent, seaLevels, sunLevels, error, loading }
+  return { currentWeather, seaLevels, sunLevels, error, loading }
 }

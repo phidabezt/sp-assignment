@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { psiFactor, meterFactor } from '../constant/common';
 
 export const convertUnixToTime = (unix, formatDate = 'yyyy/MM/dd HH:mm:ss') => {
     const date = new Date(unix * 1000)
@@ -6,9 +7,9 @@ export const convertUnixToTime = (unix, formatDate = 'yyyy/MM/dd HH:mm:ss') => {
 }
 
 export const convertHectopascalToPsi = (hpa) => {
-    return (hpa * 0.0145037738).toFixed(2)
+    return (hpa * psiFactor).toFixed(2)
 }
 
 export const convertHectopascalToMeter = (hpa) => {
-    return (hpa * 0.0102).toFixed(2)
+    return (hpa * meterFactor).toFixed(2)
 }
