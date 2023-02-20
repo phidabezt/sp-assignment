@@ -6,6 +6,7 @@ This project was bootstrapped with [VITE](https://github.com/vitejs).
 
 In the project directory, you can run:
 
+### `yarn install`
 ### `yarn dev`
 
 Runs the app in the development mode.\
