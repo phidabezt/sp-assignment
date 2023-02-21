@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { weatherApi } from '../api/weatherApi'
-import { convertHectopascalToMeter, convertHectopascalToPsi, convertUnixToTime } from '../utils/utils'
+import { convertHectopascalToMeter, convertHectopascalToPsi, convertUnixToTime, getWeatherIcon } from '../utils/utils'
 import { VN_LAT_LNG } from '../constant/common'
 
 export const useWeather = () => { 
@@ -25,13 +25,13 @@ export const useWeather = () => {
   const fetchWeather = async () => {
     try {
       setLoading(true)
-      const response = await weatherApi.getWeather('onecall', {
+      const response = await weatherApi.getWeather({
         lat: VN_LAT_LNG.lat,
         lon: VN_LAT_LNG.lon,
         units: 'metric'
       })
 
-      const icon = weatherApi.getWeatherIcon(response.current.weather[0].icon)
+      const icon = getWeatherIcon(response.current.weather[0].icon)
 
       setCurrentWeather({
         temp: Number(response.current.temp).toFixed(0),
