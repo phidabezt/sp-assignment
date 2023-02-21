@@ -86,16 +86,15 @@ export const Chart = ({ dataTide, dataSun }) => {
   }))
 
   const reduceTides = dataTide.reduce((acc, d, i) => {
-    if (i % 2 === 0) acc.push(d)
-    acc.pop()
-    return acc.map(d => ({
-      ...d,
-      key: xValueTime(d),
-      time: d3.timeFormat('%I:%M %p')(new Date(d.time)),
-      x_scale_value: xScale(xValueTime(d)),
-      y_scale_value: yScaleTide(yValueTide(d))
-    }))
-  }, [])
+    if (i % 2 !== 0) acc.push(d)
+    return acc
+  }, []).map(d => ({
+    ...d,
+    key: xValueTime(d),
+    time: d3.timeFormat('%I:%M %p')(new Date(d.time)),
+    x_scale_value: xScale(xValueTime(d)),
+    y_scale_value: yScaleTide(yValueTide(d))
+  }))
 
   const nights = dataSun.map((d, i) => {
     if (i <= 0 || i > dataSun.length - 1) return undefined
