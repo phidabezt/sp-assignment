@@ -2,7 +2,7 @@ import React from 'react'
 import * as d3 from "d3";
 import classes from './Tides.module.scss'
 
-export const Tides = ({ xScale, yScaleTide, dataTide, reduceTides }) => {  
+export const Tides = ({ xScale, yScaleTide, dataTide, reduceTides }) => {
   return (
     <g className={classes['tides']}>
       {
